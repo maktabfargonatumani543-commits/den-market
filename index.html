@@ -3,155 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Den Market | Do'koningiz</title>
+    <title>Dwen Market | Zamonaviy Do‘kon</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Poppins', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            min-height: 100vh;
-            padding: 20px;
-            color: #fff;
+            background: var(--tg-theme-bg-color, #0a0f1c);
+            color: var(--tg-theme-text-color, #ffffff);
+            transition: background 0.3s, color 0.3s;
+            padding: 16px;
+            padding-bottom: 100px;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(var(--tg-theme-secondary-bg-color-rgb, 255,255,255), 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.25s ease;
         }
 
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            margin-bottom: 24px;
+            padding: 12px 0;
         }
-
         .logo {
             font-size: 4rem;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            animation: bounce 2s infinite;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2));
+            animation: float 3s ease-in-out infinite;
         }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
         }
-
         .title {
             font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #fff, #ffd89b, #c7e9fb);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #ffb347, #ff6b6b);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.5px;
         }
-
         .subtitle {
             font-size: 0.8rem;
-            opacity: 0.9;
-            margin-top: 5px;
+            opacity: 0.7;
+            margin-top: 4px;
         }
 
-        /* Menu Grid */
+        /* Menu grid */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Card */
-        .card {
-            background: rgba(255,255,255,0.1);
+        /* Product card */
+        .product-card {
+            background: rgba(var(--tg-theme-secondary-bg-color-rgb, 30,30,40), 0.6);
             backdrop-filter: blur(10px);
             border-radius: 24px;
-            padding: 16px 12px;
+            padding: 14px 12px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.2);
+        .product-card:active {
+            transform: scale(0.97);
         }
-
-        .emoji {
-            font-size: 2.8rem;
+        .product-emoji {
+            font-size: 2.5rem;
             margin-bottom: 8px;
         }
-
-        .item-name {
+        .product-name {
             font-weight: 600;
             font-size: 0.95rem;
             margin-bottom: 4px;
+            line-height: 1.3;
         }
-
-        .price {
+        .product-price {
             font-size: 0.85rem;
-            color: #ffd89b;
-            font-weight: bold;
+            color: #ffb347;
+            font-weight: 600;
         }
-
-        .quantity-control {
+        .quantity-selector {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             margin-top: 12px;
         }
-
         .qty-btn {
-            background: #fff;
+            background: var(--tg-theme-button-color, #ffffff);
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            border-radius: 40px;
             font-size: 1.2rem;
             font-weight: bold;
-            color: #203a43;
+            color: var(--tg-theme-button-text-color, #000);
             cursor: pointer;
             transition: 0.1s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-
         .qty-btn:active {
             transform: scale(0.92);
         }
-
         .qty-value {
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 600;
             min-width: 32px;
-            text-align: center;
         }
 
-        /* Cart Section */
+        /* Cart section */
         .cart-section {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
+            background: rgba(var(--tg-theme-secondary-bg-color-rgb, 20,20,30), 0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
             padding: 20px;
-            margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
+            margin-top: 8px;
+            border: 1px solid rgba(255,255,255,0.15);
         }
-
         .cart-header {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
         }
-
         .cart-items {
-            max-height: 180px;
+            max-height: 200px;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
-
         .cart-item {
             display: flex;
             justify-content: space-between;
@@ -159,35 +156,32 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .cart-item-name {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
-
         .cart-item-price {
-            font-weight: bold;
-            color: #ffd89b;
+            font-weight: 600;
+            color: #ffb347;
         }
-
         .cart-item-controls {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .cart-item-btn {
-            background: #fff;
+            background: rgba(255,255,255,0.2);
             border: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            border-radius: 30px;
             font-weight: bold;
             cursor: pointer;
-            color: #203a43;
+            color: white;
+            font-size: 1rem;
         }
-
         .total {
             display: flex;
             justify-content: space-between;
@@ -195,106 +189,86 @@
             padding: 12px 0;
             border-top: 2px solid rgba(255,255,255,0.2);
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 700;
         }
-
         .total-amount {
-            color: #ffd89b;
-            font-size: 1.3rem;
+            color: #ffb347;
+            font-size: 1.4rem;
         }
 
-        /* Input fields */
+        /* Inputs */
         .input-group {
-            margin: 15px 0;
+            margin: 16px 0;
         }
-
         .input-label {
             font-size: 0.75rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
+            opacity: 0.7;
+            margin-bottom: 6px;
             display: block;
         }
-
         input, textarea {
             width: 100%;
-            padding: 14px;
+            padding: 14px 16px;
             border: none;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.9);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.1);
+            color: var(--tg-theme-text-color, #fff);
             font-size: 0.95rem;
             outline: none;
             transition: 0.2s;
         }
-
         input:focus, textarea:focus {
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 2px #ffb347;
         }
-
         textarea {
-            border-radius: 20px;
+            border-radius: 24px;
             resize: vertical;
-            font-family: inherit;
         }
 
-        /* Buttons */
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffd89b, #c7e9fb);
-            color: #203a43;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
+        /* Empty cart */
+        .empty-cart {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.6;
         }
 
         footer {
             text-align: center;
             font-size: 0.6rem;
-            margin-top: 20px;
-            opacity: 0.6;
+            margin-top: 24px;
+            opacity: 0.5;
         }
 
+        /* Custom scroll */
         ::-webkit-scrollbar {
-            width: 3px;
+            width: 4px;
         }
-
         ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
         }
-
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: #ffb347;
             border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">🛍️🏪</div>
-        <div class="title">DEN MARKET</div>
-        <div class="subtitle">Hamma narsa bor, sifatli va arzon</div>
+        <div class="logo">🛍️✨</div>
+        <div class="title">DWEN MARKET</div>
+        <div class="subtitle">Faqat sifatli mahsulotlar · Tez yetkazib berish</div>
     </div>
 
     <div class="menu-grid" id="menuGrid"></div>
 
     <div class="cart-section">
         <div class="cart-header">
-            🛒 <span>SAVATCHA</span>
+            🛒 <span>Savatcha</span>
         </div>
         <div class="cart-items" id="cartItems">
-            <div style="text-align:center; opacity:0.7;">Savat bo'sh</div>
+            <div class="empty-cart">Savatcha bo'sh</div>
         </div>
         <div class="total">
             <span>💰 Jami</span>
@@ -310,50 +284,85 @@
             <div class="input-label">📍 Yetkazib berish manzili</div>
             <textarea id="address" rows="2" placeholder="Ko'cha, uy, tuman, shahar..."></textarea>
         </div>
-
-        <button class="btn btn-primary" id="orderBtn">✅ BUYURTMA BERISH</button>
     </div>
 
-    <footer>Den Market 2026 | Sifatli xizmat</footer>
+    <footer>Dwen Market 2026 | Sifat kafolati</footer>
 
     <script>
+        // ========= YANGI MAHSULOTLAR (faqat siz bergan ro'yxat) =========
         const MENU = {
-            "🍞 Non": { price: 4000, emoji: "🍞" },
-            "🥛 Sut": { price: 8000, emoji: "🥛" },
-            "🧀 Pishloq": { price: 25000, emoji: "🧀" },
-            "🥚 Tuxum": { price: 2000, emoji: "🥚" },
-            "🍎 Olma": { price: 5000, emoji: "🍎" },
-            "🍌 Banan": { price: 8000, emoji: "🍌" },
-            "🍗 Tovuq": { price: 32000, emoji: "🍗" },
-            "🍚 Guruch": { price: 12000, emoji: "🍚" },
-            "🫘 Loviya": { price: 10000, emoji: "🫘" },
-            "🥕 Sabzi": { price: 3000, emoji: "🥕" },
-            "🥔 Kartoshka": { price: 4000, emoji: "🥔" },
-            "🧅 Piyoz": { price: 3000, emoji: "🧅" }
+            "🥔 Kartoshka": { price: 7000, emoji: "🥔" },
+            "🧅 Piyoz": { price: 2000, emoji: "🧅" },
+            "🥕 Sabzi qizil": { price: 4000, emoji: "🥕" },
+            "🥕 Sabzi sariq": { price: 3300, emoji: "🥕" },
+            "🍚 Guruch Xorazm Lazer": { price: 14000, emoji: "🍚" },
+            "🍚 Guruch Rishton Lazer": { price: 13000, emoji: "🍚" },
+            "🧂 Tuz Roxat": { price: 5000, emoji: "🧂" },
+            "🍃 Kok Choy (0.5kg)": { price: 20000, emoji: "🍃" },
+            "🫒 Donya yog' (5L)": { price: 100000, emoji: "🫒" },
+            "🫒 Farg'ona yog' (3.6kg)": { price: 68000, emoji: "🫒" },
+            "🫒 Lazzat yog' (5L)": { price: 100000, emoji: "🫒" }
         };
 
         let cart = {};
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
+        tg.MainButton.hide();
+
+        // Set theme colors to CSS variables
+        const root = document.documentElement;
+        if (tg.themeParams) {
+            root.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#0a0f1c');
+            root.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#ffffff');
+            root.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#ffb347');
+            root.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#000000');
+            const bgRGB = tg.themeParams.bg_color ? hexToRgb(tg.themeParams.bg_color) : '10,15,28';
+            root.style.setProperty('--tg-theme-secondary-bg-color-rgb', bgRGB);
+        }
+
+        function hexToRgb(hex) {
+            let c = hex.substring(1);
+            if (c.length === 3) c = c.split('').map(ch => ch+ch).join('');
+            const intVal = parseInt(c, 16);
+            return `${(intVal >> 16) & 255}, ${(intVal >> 8) & 255}, ${intVal & 255}`;
+        }
 
         function renderMenu() {
             const container = document.getElementById('menuGrid');
             container.innerHTML = '';
             for (const [name, data] of Object.entries(MENU)) {
+                const idSafe = name.replace(/\s/g, '').replace(/[()]/g, '');
                 container.innerHTML += `
-                    <div class="card" onclick="changeQty('${name}', 1)">
-                        <div class="emoji">${data.emoji}</div>
-                        <div class="item-name">${name}</div>
-                        <div class="price">${data.price.toLocaleString()} so'm</div>
-                        <div class="quantity-control" onclick="event.stopPropagation()">
-                            <button class="qty-btn" onclick="changeQty('${name}', -1)">−</button>
-                            <span class="qty-value" id="qty-${name.replace(/\s/g,'')}">${cart[name] || 0}</span>
-                            <button class="qty-btn" onclick="changeQty('${name}', 1)">+</button>
+                    <div class="product-card" data-name="${name.replace(/[\\"']/g, '')}">
+                        <div class="product-emoji">${data.emoji}</div>
+                        <div class="product-name">${name}</div>
+                        <div class="product-price">${data.price.toLocaleString()} so'm</div>
+                        <div class="quantity-selector">
+                            <button class="qty-btn" data-name="${name.replace(/[\\"']/g, '')}" data-delta="-1">−</button>
+                            <span class="qty-value" id="qty-${idSafe}">${cart[name] || 0}</span>
+                            <button class="qty-btn" data-name="${name.replace(/[\\"']/g, '')}" data-delta="1">+</button>
                         </div>
                     </div>
                 `;
             }
+            // Add event listeners for quantity buttons
+            document.querySelectorAll('.qty-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const name = btn.getAttribute('data-name');
+                    const delta = parseInt(btn.getAttribute('data-delta'));
+                    changeQty(name, delta);
+                });
+            });
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'BUTTON') {
+                        const name = card.getAttribute('data-name');
+                        changeQty(name, 1);
+                    }
+                });
+            });
         }
 
         function changeQty(name, delta) {
@@ -363,9 +372,11 @@
             if (newVal === 0) delete cart[name];
             else cart[name] = newVal;
             
-            const span = document.getElementById(`qty-${name.replace(/\s/g,'')}`);
+            const idSafe = name.replace(/\s/g, '').replace(/[()]/g, '');
+            const span = document.getElementById(`qty-${idSafe}`);
             if (span) span.innerText = cart[name] || 0;
             updateCart();
+            updateMainButton();
         }
 
         function updateCart() {
@@ -373,7 +384,7 @@
             let total = 0;
             
             if (Object.keys(cart).length === 0) {
-                cartDiv.innerHTML = '<div style="text-align:center; opacity:0.7;">Savat bo\'sh</div>';
+                cartDiv.innerHTML = '<div class="empty-cart">Savatcha bo\'sh</div>';
                 document.getElementById('totalAmount').innerHTML = '0 so\'m';
                 return;
             }
@@ -386,20 +397,38 @@
                     <div class="cart-item">
                         <div class="cart-item-name">
                             <span>${MENU[item].emoji}</span>
-                            <span>${item} x${qty}</span>
+                            <span style="font-size:0.85rem;">${item} x${qty}</span>
                         </div>
                         <div class="cart-item-controls">
                             <span class="cart-item-price">${sum.toLocaleString()} so'm</span>
-                            <button class="cart-item-btn" onclick="changeQty('${item}', -1)">−</button>
-                            <button class="cart-item-btn" onclick="changeQty('${item}', 1)">+</button>
+                            <button class="cart-item-btn" data-item="${item.replace(/[\\"']/g, '')}" data-delta="-1">−</button>
+                            <button class="cart-item-btn" data-item="${item.replace(/[\\"']/g, '')}" data-delta="1">+</button>
                         </div>
                     </div>
                 `;
             }
             document.getElementById('totalAmount').innerHTML = total.toLocaleString() + ' so\'m';
+            
+            // Attach cart item events
+            document.querySelectorAll('.cart-item-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const item = btn.getAttribute('data-item');
+                    const delta = parseInt(btn.getAttribute('data-delta'));
+                    changeQty(item, delta);
+                });
+            });
         }
 
-        document.getElementById('orderBtn').onclick = () => {
+        function updateMainButton() {
+            if (Object.keys(cart).length > 0) {
+                tg.MainButton.setText("✅ Buyurtma berish");
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+        }
+
+        async function sendOrder() {
             const phone = document.getElementById('phone').value.trim();
             const address = document.getElementById('address').value.trim();
             
@@ -425,12 +454,17 @@
                 date: new Date().toLocaleString()
             };
             
+            tg.MainButton.showProgress();
             tg.sendData(JSON.stringify(orderData));
-            tg.showPopup({ title: "✅ Buyurtma qabul qilindi!", message: "Tez orada operator siz bilan bog'lanadi." });
+            tg.showPopup({ title: "✅ Buyurtma qabul qilindi!", message: "Operator siz bilan tez orada bog'lanadi." });
+            tg.MainButton.hideProgress();
             tg.close();
-        };
+        }
 
+        tg.MainButton.onClick(sendOrder);
         renderMenu();
+        updateCart();
+        tg.setHeaderColor("bg_color");
     </script>
 </body>
 </html>
