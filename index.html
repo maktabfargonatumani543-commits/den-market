@@ -6,287 +6,67 @@
     <title>Dwen Market</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            background: #0a0f1c;
-            color: white;
-            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-            padding: 20px;
-            margin: 0;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            font-size: 3rem;
-        }
-        h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #fff, #ffb347);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .product-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .product-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .product-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .product-price {
-            color: #ffb347;
-            font-size: 0.9rem;
-        }
-        .qty-control {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .qty-btn {
-            background: #ffb347;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .cart-section {
-            background: rgba(0,0,0,0.4);
-            border-radius: 24px;
-            padding: 16px;
-            margin-top: 16px;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        .total {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 12px;
-            text-align: right;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 30px;
-            border: none;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            margin: 10px 0;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 40px;
-            border: none;
-            background: #ffb347;
-            font-weight: bold;
-            font-size: 1rem;
-            margin-top: 15px;
-            cursor: pointer;
-        }
-        .empty-cart {
-            text-align: center;
-            opacity: 0.7;
-            padding: 20px;
-        }
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            opacity: 0.5;
-            margin-top: 20px;
-        }
+        body { background: #0a0f1c; color: white; padding: 20px; font-family: system-ui; }
+        .box { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+        .qty-box { display: flex; gap: 12px; align-items: center; }
+        button { background: #ffb347; border: none; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 30px; border: none; background: rgba(255,255,255,0.2); color: white; }
+        .order-btn { width: 100%; background: #ffb347; color: black; margin-top: 20px; }
+        .cart-item { background: rgba(0,0,0,0.3); margin: 5px 0; padding: 8px; border-radius: 12px; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">🛍️</div>
-        <h1>DWEN MARKET</h1>
-        <p>Sifatli mahsulotlar, tez yetkazib berish</p>
-    </div>
-
-    <div class="product-list" id="productList"></div>
-
-    <div class="cart-section">
-        <h3>🛒 Savatcha</h3>
-        <div id="cartItems"></div>
-        <div class="total" id="totalAmount">Jami: 0 so'm</div>
-    </div>
-
-    <input type="tel" id="phone" placeholder="📞 Telefon raqam (+998...)" />
-    <textarea id="address" rows="2" placeholder="📍 Yetkazib berish manzili"></textarea>
-
-    <button id="orderBtn">✅ Buyurtma berish</button>
-    <footer>Dwen Market 2026 | Barcha huquqlar himoyalangan</footer>
-
+    <h2>🛍 DWEN MARKET</h2>
+    <div id="products"></div>
+    <h3>🛒 Savatcha</h3>
+    <div id="cart"></div>
+    <div id="total">Jami: 0 so'm</div>
+    <input id="phone" placeholder="📞 Telefon" type="tel">
+    <textarea id="address" placeholder="📍 Manzil"></textarea>
+    <button id="order" class="order-btn">✅ Buyurtma berish</button>
     <script>
-        // Mahsulotlar ro'yxati (barchasi, shu jumladan yog'lar)
         const MAHSULOTLAR = {
-            "Kartoshka": 7000,
-            "Piyoz": 2000,
-            "Sabzi qizil": 4000,
-            "Sabzi sariq": 3300,
-            "Guruch Xorazm Lazer": 14000,
-            "Guruch Rishton Lazer": 13000,
-            "Tuz Roxat": 5000,
-            "Kok Choy (0.5kg)": 20000,
-            "Donya yog' (5L)": 100000,
-            "Farg'ona yog' (3.6kg)": 68000,
-            "Lazzat yog' (5L)": 100000
+            "Kartoshka":7000,"Piyoz":2000,"🥕Sabzi qizil":4000,"🥕Sabzi sariq":3300,
+            "🍚Guruch Xorazm Lazer":14000,"🍚Guruch Rishton Lazer":13000,"🧂Tuz Roxat":5000,
+            "🍃Kok Choy (0.5kg)":20000,"Donya yog' (5L)":100000,"Farg'ona yog' (3.6kg)":68000,"Lazzat yog' (5L)":100000
         };
-
         let savat = {};
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        const tg = window.Telegram.WebApp; tg.expand();
 
-        // Mahsulotlarni ekranga chiqarish
-        function renderProducts() {
-            const container = document.getElementById('productList');
-            container.innerHTML = '';
-            for (const [nom, narx] of Object.entries(MAHSULOTLAR)) {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.setAttribute('data-name', nom);
-                const safeId = 'qty_' + nom.replace(/[\s\(\)']/g, '');
-                card.innerHTML = `
-                    <div class="product-name">${nom}</div>
-                    <div class="product-price">${narx.toLocaleString()} so'm</div>
-                    <div class="qty-control">
-                        <button class="qty-btn minus" data-name="${nom}">−</button>
-                        <span id="${safeId}">0</span>
-                        <button class="qty-btn plus" data-name="${nom}">+</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            }
-            // Tugmalarga event qo'shish
-            document.querySelectorAll('.minus').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const name = btn.getAttribute('data-name');
-                    changeQuantity(name, -1);
-                });
-            });
-            document.querySelectorAll('.plus').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const name = btn.getAttribute('data-name');
-                    changeQuantity(name, 1);
-                });
-            });
-            // Kartaga bosganda ham qo'shilsin (sabzi yoki yog'lar uchun qulay)
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (e.target.tagName !== 'BUTTON') {
-                        const name = card.getAttribute('data-name');
-                        changeQuantity(name, 1);
-                    }
-                });
-            });
-        }
-
-        function changeQuantity(name, delta) {
-            const current = savat[name] || 0;
-            const newVal = current + delta;
-            if (newVal <= 0) {
-                delete savat[name];
-            } else {
-                savat[name] = newVal;
-            }
-            // Ko'rinishni yangilash
-            const safeId = 'qty_' + name.replace(/[\s\(\)']/g, '');
-            const span = document.getElementById(safeId);
-            if (span) span.innerText = savat[name] || 0;
-            updateCart();
-        }
-
-        function updateCart() {
-            const cartDiv = document.getElementById('cartItems');
-            let total = 0;
-            if (Object.keys(savat).length === 0) {
-                cartDiv.innerHTML = '<div class="empty-cart">Hozircha bo\'sh</div>';
-                document.getElementById('totalAmount').innerHTML = 'Jami: 0 so\'m';
-                return;
-            }
+        function render() {
             let html = '';
-            for (const [name, qty] of Object.entries(savat)) {
-                const sum = MAHSULOTLAR[name] * qty;
-                total += sum;
-                html += `<div class="cart-item">
-                            <span>${name} x${qty}</span>
-                            <span>${sum.toLocaleString()} so'm</span>
-                         </div>`;
+            for (let [n, p] of Object.entries(MAHSULOTLAR)) {
+                html += `<div class="box">
+                            <div><strong>${n}</strong><br>${p.toLocaleString()} so'm</div>
+                            <div class="qty-box">
+                                <button onclick="chang('${n}',-1)">−</button>
+                                <span id="c-${n.replace(/\s/g,'')}">${savat[n]||0}</span>
+                                <button onclick="chang('${n}',1)">+</button>
+                            </div>
+                        </div>`;
             }
-            cartDiv.innerHTML = html;
-            document.getElementById('totalAmount').innerHTML = `Jami: ${total.toLocaleString()} so'm`;
+            document.getElementById('products').innerHTML = html;
         }
-
-        // Buyurtma berish tugmasi
-        document.getElementById('orderBtn').onclick = () => {
-            // 1. Konsolga yozamiz (tekshirish uchun)
-            console.log("Buyurtma tugmasi bosildi");
-
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-
-            if (Object.keys(savat).length === 0) {
-                tg.showPopup({ title: "Xatolik", message: "Iltimos, mahsulot tanlang!" });
-                return;
-            }
-            if (phone === "") {
-                tg.showPopup({ title: "Xatolik", message: "Telefon raqamni kiriting!" });
-                return;
-            }
-            if (address === "") {
-                tg.showPopup({ title: "Xatolik", message: "Yetkazib berish manzilini kiriting!" });
-                return;
-            }
-
-            // Jami summani hisoblash
-            let totalSum = 0;
-            const cartArray = [];
-            for (const [name, qty] of Object.entries(savat)) {
-                const price = MAHSULOTLAR[name];
-                const itemTotal = price * qty;
-                totalSum += itemTotal;
-                cartArray.push({ name, qty, price, total: itemTotal });
-            }
-
-            const orderData = {
-                cart: cartArray,
-                total: totalSum,
-                phone: phone,
-                address: address,
-                date: new Date().toLocaleString('uz-UZ')
-            };
-
-            // Telegram orqali yuborish
-            tg.sendData(JSON.stringify(orderData));
-            tg.showPopup({ title: "✅ Buyurtma qabul qilindi", message: "Operator siz bilan bog'lanadi." });
+        window.chang = function(n,d){ let cur=savat[n]||0, nv=cur+d; if(nv<=0) delete savat[n]; else savat[n]=nv; document.getElementById(`c-${n.replace(/\s/g,'')}`).innerText=savat[n]||0; update(); };
+        function update(){
+            let total=0, html='';
+            for(let [n,q] of Object.entries(savat)){ let s=MAHSULOTLAR[n]*q; total+=s; html+=`<div class="cart-item"><span>${n} x${q}</span><span>${s.toLocaleString()} so'm</span></div>`; }
+            document.getElementById('cart').innerHTML=html||'Bo\'sh';
+            document.getElementById('total').innerHTML=`Jami: ${total.toLocaleString()} so'm`;
+        }
+        document.getElementById('order').onclick=()=>{
+            let phone=document.getElementById('phone').value.trim();
+            let address=document.getElementById('address').value.trim();
+            if(Object.keys(savat).length===0){ tg.showPopup({title:"Xatolik",message:"Mahsulot tanlang"}); return; }
+            if(!phone){ tg.showPopup({title:"Xatolik",message:"Telefon raqam kerak"}); return; }
+            if(!address){ tg.showPopup({title:"Xatolik",message:"Manzil kerak"}); return; }
+            let items=[], total=0;
+            for(let [n,q] of Object.entries(savat)){ let p=MAHSULOTLAR[n]; let s=p*q; total+=s; items.push({name:n,qty:q,price:p,total:s}); }
+            tg.sendData(JSON.stringify({cart:items,total:total,phone:phone,address:address,date:new Date().toLocaleString()}));
+            tg.showPopup({title:"✅ Qabul qilindi",message:"Operator bog'lanadi"});
             tg.close();
         };
-
-        renderProducts();
-        updateCart();
+        render(); update();
     </script>
 </body>
 </html>
