@@ -2,257 +2,291 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Dwen Market | Do‘kon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dwen Market</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
         body {
-            background: var(--tg-theme-bg-color, #0a0f1c);
-            color: var(--tg-theme-text-color, #ffffff);
-            padding: 16px;
-            padding-bottom: 100px;
+            background: #0a0f1c;
+            color: white;
+            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+            padding: 20px;
+            margin: 0;
         }
-        .sarlavha { text-align: center; margin-bottom: 24px; }
-        .logo { font-size: 4rem; animation: suzish 3s ease-in-out infinite; }
-        @keyframes suzish { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
-        .nomi { font-size: 2rem; font-weight: bold; background: linear-gradient(135deg, #fff, #ffb347, #ff6b6b); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .tagline { font-size: 0.8rem; opacity: 0.7; }
-        .mahsulotlar-tarmoq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
-        .karta { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 24px; padding: 14px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); transition: transform 0.2s; }
-        .karta:active { transform: scale(0.97); }
-        .mahsulot-emoji { font-size: 2.5rem; }
-        .mahsulot-nomi { font-weight: bold; font-size: 0.9rem; }
-        .mahsulot-narxi { color: #ffb347; font-weight: bold; font-size: 0.85rem; }
-        .son-tanlagich { display: flex; justify-content: center; gap: 12px; margin-top: 12px; }
-        .son-tugma { background: #ffb347; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
-        .son-qiymat { font-size: 1.2rem; font-weight: bold; min-width: 32px; }
-        .savat-qism { background: rgba(0,0,0,0.5); backdrop-filter: blur(16px); border-radius: 32px; padding: 20px; margin-top: 8px; }
-        .savat-sarlavha { font-size: 1.2rem; font-weight: bold; margin-bottom: 12px; }
-        .savat-mahsulotlar { max-height: 200px; overflow-y: auto; }
-        .savat-mahsulot { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .savat-boshqaruv { display: flex; gap: 10px; align-items: center; }
-        .savat-tugma { background: rgba(255,255,255,0.2); border: none; width: 28px; height: 28px; border-radius: 50%; color: white; cursor: pointer; }
-        .jami { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 12px; margin-top: 12px; font-weight: bold; }
-        .jami-miqdor { color: #ffb347; font-size: 1.3rem; }
-        .kiritish-guruhi { margin: 16px 0; }
-        input, textarea { width: 100%; padding: 12px; border-radius: 30px; border: none; background: rgba(255,255,255,0.1); color: white; }
-        .tugma { width: 100%; padding: 14px; border-radius: 50px; background: #ffb347; color: #000; font-weight: bold; border: none; margin-top: 10px; cursor: pointer; }
-        .tugmalar-qator { display: flex; gap: 10px; margin-top: 20px; }
-        .bosh-savat { text-align: center; opacity: 0.6; padding: 20px; }
-        footer { text-align: center; font-size: 0.6rem; opacity: 0.5; margin-top: 20px; }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 3rem;
+        }
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #fff, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .product-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-price {
+            color: #ffb347;
+            font-size: 0.9rem;
+        }
+        .qty-control {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .qty-btn {
+            background: #ffb347;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 24px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 12px;
+            text-align: right;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            border: none;
+            background: #ffb347;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        .empty-cart {
+            text-align: center;
+            opacity: 0.7;
+            padding: 20px;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.5;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="sarlavha">
-        <div class="logo">🛍️✨</div>
-        <div class="nomi">DWEN MARKET</div>
-        <div class="tagline">Faqat sifatli mahsulotlar</div>
+    <div class="header">
+        <div class="logo">🛍️</div>
+        <h1>DWEN MARKET</h1>
+        <p>Sifatli mahsulotlar, tez yetkazib berish</p>
     </div>
 
-    <div class="mahsulotlar-tarmoq" id="mahsulotlarTarmoq"></div>
+    <div class="product-list" id="productList"></div>
 
-    <div class="savat-qism">
-        <div class="savat-sarlavha">🛒 Savatcha</div>
-        <div class="savat-mahsulotlar" id="savatMahsulotlar"><div class="bosh-savat">Bo'sh</div></div>
-        <div class="jami"><span>💰 Jami</span><span class="jami-miqdor" id="jamiMiqdor">0 so'm</span></div>
-
-        <button id="joylashuvTugmasi" class="tugma">📍 Joylashuvni ulashish</button>
-        <div class="kiritish-guruhi"><label>📞 Telefon</label><input type="tel" id="telefon" placeholder="+998 __ ___ __ __"></div>
-        <div class="kiritish-guruhi"><label>📍 Manzil</label><textarea id="manzil" rows="2" placeholder="Ko'cha, uy, tuman..."></textarea></div>
-        
-        <div class="tugmalar-qator">
-            <button id="aloqaTugmasi" class="tugma">📞 Aloqa</button>
-            <button id="malumotTugmasi" class="tugma">ℹ️ Ma'lumotlar</button>
-        </div>
-        
-        <button id="buyurtmaTugmasi" class="tugma">✅ Buyurtma berish</button>
+    <div class="cart-section">
+        <h3>🛒 Savatcha</h3>
+        <div id="cartItems"></div>
+        <div class="total" id="totalAmount">Jami: 0 so'm</div>
     </div>
-    <footer>Dwen Market 2026</footer>
+
+    <input type="tel" id="phone" placeholder="📞 Telefon raqam (+998...)" />
+    <textarea id="address" rows="2" placeholder="📍 Yetkazib berish manzili"></textarea>
+
+    <button id="orderBtn">✅ Buyurtma berish</button>
+    <footer>Dwen Market 2026 | Barcha huquqlar himoyalangan</footer>
 
     <script>
-        // ========= MAHSULOTLAR (yog'lar bilan birga) =========
+        // Mahsulotlar ro'yxati (barchasi, shu jumladan yog'lar)
         const MAHSULOTLAR = {
-            "🥔 Kartoshka": { narxi: 7000, belgi: "🥔" },
-            "🧅 Piyoz": { narxi: 2000, belgi: "🧅" },
-            "🥕 Sabzi qizil": { narxi: 4000, belgi: "🥕" },
-            "🥕 Sabzi sariq": { narxi: 3300, belgi: "🥕" },
-            "🍚 Guruch Xorazm Lazer": { narxi: 14000, belgi: "🍚" },
-            "🍚 Guruch Rishton Lazer": { narxi: 13000, belgi: "🍚" },
-            "🧂 Tuz Roxat": { narxi: 5000, belgi: "🧂" },
-            "🍃 Kok Choy (0.5kg)": { narxi: 20000, belgi: "🍃" },
-            "🫒 Donya yog' (5L)": { narxi: 100000, belgi: "🫒" },
-            "🫒 Farg'ona yog' (3.6kg)": { narxi: 68000, belgi: "🫒" },
-            "🫒 Lazzat yog' (5L)": { narxi: 100000, belgi: "🫒" }
+            "Kartoshka": 7000,
+            "Piyoz": 2000,
+            "Sabzi qizil": 4000,
+            "Sabzi sariq": 3300,
+            "Guruch Xorazm Lazer": 14000,
+            "Guruch Rishton Lazer": 13000,
+            "Tuz Roxat": 5000,
+            "Kok Choy (0.5kg)": 20000,
+            "Donya yog' (5L)": 100000,
+            "Farg'ona yog' (3.6kg)": 68000,
+            "Lazzat yog' (5L)": 100000
         };
 
         let savat = {};
-        let foydalanuvchiJoylashuvi = null;
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
-        tg.MainButton.hide();
 
-        // Mahsulotlarni chiqarish
-        function mahsulotlarniKorsat() {
-            const quti = document.getElementById('mahsulotlarTarmoq');
-            quti.innerHTML = '';
-            for (const [nom, malumot] of Object.entries(MAHSULOTLAR)) {
-                const xavfsizNom = nom.replace(/[\s\(\)]/g, '');
-                quti.innerHTML += `
-                    <div class="karta" data-nom="${nom.replace(/'/g, "\\'")}">
-                        <div class="mahsulot-emoji">${malumot.belgi}</div>
-                        <div class="mahsulot-nomi">${nom}</div>
-                        <div class="mahsulot-narxi">${malumot.narxi.toLocaleString()} so'm</div>
-                        <div class="son-tanlagich">
-                            <button class="son-tugma" data-nom="${nom.replace(/'/g, "\\'")}" data-farq="-1">−</button>
-                            <span class="son-qiymat" id="son-${xavfsizNom}">${savat[nom] || 0}</span>
-                            <button class="son-tugma" data-nom="${nom.replace(/'/g, "\\'")}" data-farq="1">+</button>
-                        </div>
+        // Mahsulotlarni ekranga chiqarish
+        function renderProducts() {
+            const container = document.getElementById('productList');
+            container.innerHTML = '';
+            for (const [nom, narx] of Object.entries(MAHSULOTLAR)) {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.setAttribute('data-name', nom);
+                const safeId = 'qty_' + nom.replace(/[\s\(\)']/g, '');
+                card.innerHTML = `
+                    <div class="product-name">${nom}</div>
+                    <div class="product-price">${narx.toLocaleString()} so'm</div>
+                    <div class="qty-control">
+                        <button class="qty-btn minus" data-name="${nom}">−</button>
+                        <span id="${safeId}">0</span>
+                        <button class="qty-btn plus" data-name="${nom}">+</button>
                     </div>
                 `;
+                container.appendChild(card);
             }
-            // Tugmalarga hodisa biriktirish
-            document.querySelectorAll('.son-tugma').forEach(tugma => {
-                tugma.addEventListener('click', (e) => {
+            // Tugmalarga event qo'shish
+            document.querySelectorAll('.minus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const nom = tugma.getAttribute('data-nom');
-                    const farq = parseInt(tugma.getAttribute('data-farq'));
-                    miqdorniOzgartir(nom, farq);
+                    const name = btn.getAttribute('data-name');
+                    changeQuantity(name, -1);
                 });
             });
-            // Kartaga bosganda ham qo'shilsin
-            document.querySelectorAll('.karta').forEach(karta => {
-                karta.addEventListener('click', (e) => {
+            document.querySelectorAll('.plus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const name = btn.getAttribute('data-name');
+                    changeQuantity(name, 1);
+                });
+            });
+            // Kartaga bosganda ham qo'shilsin (sabzi yoki yog'lar uchun qulay)
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', (e) => {
                     if (e.target.tagName !== 'BUTTON') {
-                        const nom = karta.getAttribute('data-nom');
-                        miqdorniOzgartir(nom, 1);
+                        const name = card.getAttribute('data-name');
+                        changeQuantity(name, 1);
                     }
                 });
             });
         }
 
-        function miqdorniOzgartir(nom, farq) {
-            let joriy = savat[nom] || 0;
-            let yangi = joriy + farq;
-            if (yangi < 0) yangi = 0;
-            if (yangi === 0) {
-                delete savat[nom];
+        function changeQuantity(name, delta) {
+            const current = savat[name] || 0;
+            const newVal = current + delta;
+            if (newVal <= 0) {
+                delete savat[name];
             } else {
-                savat[nom] = yangi;
+                savat[name] = newVal;
             }
-            const xavfsizNom = nom.replace(/[\s\(\)]/g, '');
-            const span = document.getElementById(`son-${xavfsizNom}`);
-            if (span) span.innerText = savat[nom] || 0;
-            savatniYangila();
+            // Ko'rinishni yangilash
+            const safeId = 'qty_' + name.replace(/[\s\(\)']/g, '');
+            const span = document.getElementById(safeId);
+            if (span) span.innerText = savat[name] || 0;
+            updateCart();
         }
 
-        function savatniYangila() {
-            const quti = document.getElementById('savatMahsulotlar');
-            let jami = 0;
+        function updateCart() {
+            const cartDiv = document.getElementById('cartItems');
+            let total = 0;
             if (Object.keys(savat).length === 0) {
-                quti.innerHTML = '<div class="bosh-savat">Savatcha bo\'sh</div>';
-                document.getElementById('jamiMiqdor').innerText = '0 so\'m';
+                cartDiv.innerHTML = '<div class="empty-cart">Hozircha bo\'sh</div>';
+                document.getElementById('totalAmount').innerHTML = 'Jami: 0 so\'m';
                 return;
             }
-            quti.innerHTML = '';
-            for (const [nom, miqdor] of Object.entries(savat)) {
-                const summa = MAHSULOTLAR[nom].narxi * miqdor;
-                jami += summa;
-                quti.innerHTML += `
-                    <div class="savat-mahsulot">
-                        <div><span>${MAHSULOTLAR[nom].belgi}</span> ${nom} x${miqdor}</div>
-                        <div class="savat-boshqaruv">
-                            <span>${summa.toLocaleString()} so'm</span>
-                            <button class="savat-tugma" data-nom="${nom.replace(/'/g, "\\'")}" data-farq="-1">−</button>
-                            <button class="savat-tugma" data-nom="${nom.replace(/'/g, "\\'")}" data-farq="1">+</button>
-                        </div>
-                    </div>
-                `;
+            let html = '';
+            for (const [name, qty] of Object.entries(savat)) {
+                const sum = MAHSULOTLAR[name] * qty;
+                total += sum;
+                html += `<div class="cart-item">
+                            <span>${name} x${qty}</span>
+                            <span>${sum.toLocaleString()} so'm</span>
+                         </div>`;
             }
-            document.getElementById('jamiMiqdor').innerText = jami.toLocaleString() + ' so\'m';
-            // Savatcha ichidagi tugmalarga hodisa
-            document.querySelectorAll('.savat-tugma').forEach(tugma => {
-                tugma.addEventListener('click', (e) => {
-                    const nom = tugma.getAttribute('data-nom');
-                    const farq = parseInt(tugma.getAttribute('data-farq'));
-                    miqdorniOzgartir(nom, farq);
-                });
-            });
+            cartDiv.innerHTML = html;
+            document.getElementById('totalAmount').innerHTML = `Jami: ${total.toLocaleString()} so'm`;
         }
 
-        // Joylashuvni olish
-        document.getElementById('joylashuvTugmasi').onclick = () => {
-            if (!navigator.geolocation) {
-                tg.showPopup({ title: "Xatolik", message: "Brauzeringiz joylashuvni qo'llab-quvvatlamaydi." });
-                return;
-            }
-            navigator.geolocation.getCurrentPosition((pozitsiya) => {
-                foydalanuvchiJoylashuvi = { kenglik: pozitsiya.coords.latitude, uzunlik: pozitsiya.coords.longitude };
-                tg.showPopup({ title: "✅ Joylashuv ulashildi", message: "Yetkazib berish masofasi hisoblanadi." });
-                document.getElementById('joylashuvTugmasi').style.display = 'none';
-            }, () => {
-                tg.showPopup({ title: "Xatolik", message: "Joylashuvga ruxsat bermadingiz." });
-            });
-        };
+        // Buyurtma berish tugmasi
+        document.getElementById('orderBtn').onclick = () => {
+            // 1. Konsolga yozamiz (tekshirish uchun)
+            console.log("Buyurtma tugmasi bosildi");
 
-        // Aloqa va ma'lumot tugmalari
-        document.getElementById('aloqaTugmasi').onclick = () => {
-            tg.showPopup({ title: "📞 Aloqa", message: "Admin: +998 99 123 45 67\nTelegram: @dwen_market_admin\nIsh vaqti: 9:00 - 21:00" });
-        };
-        document.getElementById('malumotTugmasi').onclick = () => {
-            tg.showPopup({ title: "ℹ️ Ma'lumotlar", message: "Dwen Market – sifatli mahsulotlar, tez yetkazib berish. Barcha mahsulotlar sertifikatlangan." });
-        };
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
 
-        // Buyurtma yuborish
-        async function buyurtmaYubor() {
-            const telefon = document.getElementById('telefon').value.trim();
-            const manzil = document.getElementById('manzil').value.trim();
             if (Object.keys(savat).length === 0) {
-                tg.showPopup({ title: "Xatolik", message: "Mahsulot tanlang!" });
+                tg.showPopup({ title: "Xatolik", message: "Iltimos, mahsulot tanlang!" });
                 return;
             }
-            if (!telefon || telefon.length < 9) {
+            if (phone === "") {
                 tg.showPopup({ title: "Xatolik", message: "Telefon raqamni kiriting!" });
                 return;
             }
-            if (!manzil || manzil.length < 5) {
-                tg.showPopup({ title: "Xatolik", message: "Manzilni kiriting!" });
+            if (address === "") {
+                tg.showPopup({ title: "Xatolik", message: "Yetkazib berish manzilini kiriting!" });
                 return;
             }
 
-            let jami = 0;
-            const savatMassivi = [];
-            for (const [nom, miqdor] of Object.entries(savat)) {
-                const narxi = MAHSULOTLAR[nom].narxi;
-                const summa = narxi * miqdor;
-                jami += summa;
-                savatMassivi.push({ nom, miqdor, narxi, summa });
+            // Jami summani hisoblash
+            let totalSum = 0;
+            const cartArray = [];
+            for (const [name, qty] of Object.entries(savat)) {
+                const price = MAHSULOTLAR[name];
+                const itemTotal = price * qty;
+                totalSum += itemTotal;
+                cartArray.push({ name, qty, price, total: itemTotal });
             }
 
-            const buyurtmaMalumoti = {
-                savat: savatMassivi,
-                jami: jami,
-                telefon: telefon,
-                manzil: manzil,
-                joylashuv: foydalanuvchiJoylashuvi,
-                sana: new Date().toLocaleString('uz-UZ', { hour12: false })
+            const orderData = {
+                cart: cartArray,
+                total: totalSum,
+                phone: phone,
+                address: address,
+                date: new Date().toLocaleString('uz-UZ')
             };
-            tg.MainButton.showProgress();
-            tg.sendData(JSON.stringify(buyurtmaMalumoti));
-            tg.showPopup({ title: "✅ Buyurtma qabul qilindi!", message: "Operator tez orada bog'lanadi." });
-            tg.MainButton.hideProgress();
-            tg.close();
-        }
-        document.getElementById('buyurtmaTugmasi').onclick = buyurtmaYubor;
 
-        mahsulotlarniKorsat();
-        savatniYangila();
+            // Telegram orqali yuborish
+            tg.sendData(JSON.stringify(orderData));
+            tg.showPopup({ title: "✅ Buyurtma qabul qilindi", message: "Operator siz bilan bog'lanadi." });
+            tg.close();
+        };
+
+        renderProducts();
+        updateCart();
     </script>
 </body>
 </html>
